@@ -1,15 +1,48 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {Image} from 'react-native';
+import {Container, Content, Button, Text, Spinner} from 'native-base';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as feedActions from '../actions/feedActions';
+import Article from './Article';
 
-export default class FeedPage extends Component {
+class FeedPage extends Component {
   render() {
+    // console.log(this.props.articles);
+    if (this.props.loading || !this.props.articles) {
+      return (<Spinner color='blue'/>)
+    }
     return (
-      <View>
-        <Text>
-          THIS IS FEED PAGE
-        </Text>
-      </View>
+      <Container>
+        <Content>
+          {this.props.articles.map(article => {
+            return <Article data={article} key={article.publishedAt}/>
+          })}
+          <Button title='Log Out' onPress={() => this.props.navigation.goBack()}>
+            <Text>Log Out</Text>
+          </Button>
+        </Content>
+      </Container>
     )
   }
-
 }
+
+function mapStateToProps(state, ownProps) {
+  // console.warn(state.articles);
+  return {
+    articles: state.articles,
+    loading: state.ajaxCallsInProgress > 0
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(
+      Object.assign(
+        {},
+        feedActions
+      ), dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FeedPage);

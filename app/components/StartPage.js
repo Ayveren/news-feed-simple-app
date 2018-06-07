@@ -1,29 +1,125 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Button} from 'react-native';
-import {Actions as routes} from 'react-native-router-flux';
+import PropTypes from 'prop-types';
+import {
+  Container,
+  Header,
+  Content,
+  Button,
+  Text,
+  Spinner,
+  List,
+  ListItem,
+  Input,
+  InputGroup,
+  Icon,
+  Title
+} from 'native-base';
 
-export default class StartPage extends Component {
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as authActions from '../actions/authActions';
+
+class StartPage extends Component {
+  constructor() {
+    super();
+    this.state = {
+      password: 'asdmkakmsd',
+      email: 'a;lskd;alksd',
+      loading: false,
+      error: false
+    };
+  }
+
+  async onSubmit() {
+    const {email, password} = this.state;
+    if (!email || !password) {
+      return;
+    }
+    // await this.props.actions.signup('asa', 'asdads@gmail.com');
+
+    try {
+      await this.props.actions.signup(email, password);
+      this.props.navigation.navigate('FeedPage');
+    }
+    catch (error) {
+      this.setState({error: 'err', loading: false});
+    }
+  }
+
+  onChangeText(newState) {
+    this.setState({...newState, authStatus: ''});
+  }
+
   render() {
-
+    if (this.props.loading) {
+      return (<Spinner color='blue'/>)
+    }
+    if (this.props.error) {
+      return (
+        <Container>
+          <Header>
+            <Title>{this.props.error}</Title>
+          </Header>
+        </Container>
+      )
+    }
     return (
-      <View style={styles.container}>
-        <Button
-          title='Sign Up'
-          onPress={() => routes.feedPage({
-            animationType: 'scroll'
-          })}
-        />
-      </View>
+
+      <Container>
+        <Header>
+          <Title>Awesome News App</Title>
+        </Header>
+        <Content>
+          <List>
+            <ListItem>
+              <InputGroup>
+                <Icon name='ios-person'/>
+                <Input placeholder='EMAIL'
+                       onChangeText={email => this.onChangeText({email})}/>
+              </InputGroup>
+            </ListItem>
+
+            <ListItem>
+              <InputGroup>
+                <Icon name='ios-unlock'/>
+                <Input
+                  placeholder='PASSWORD'
+                  secureTextEntry={true}
+                  onChangeText={password => this.onChangeText({password})}
+                />
+              </InputGroup>
+            </ListItem>
+          </List>
+          <Button title='Sign Up' block onPress={() => this.onSubmit()}>
+            <Text>Sign Up</Text>
+          </Button>
+        </Content>
+      </Container>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'red'
-  },
-  flexContainer: {
-    flex: 1
-  }
-});
+
+StartPage.propTypes = {
+  // authActions: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired
+};
+
+function mapStateToProps(state, ownProps) {
+  return {
+    authActions: state.isSignedUp,
+    loading: state.ajaxCallsInProgress > 0
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(
+      Object.assign(
+        {},
+        authActions
+      ), dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StartPage);
