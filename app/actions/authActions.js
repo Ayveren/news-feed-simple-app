@@ -11,12 +11,10 @@ export function authError(error) {
 }
 
 export function signup({password, email}) {
-  const url = 'https://adyaxmobile.eu.auth0.com/dbconnections/signup';
+  const url = 'https://google.com/signup';
   const payload = {
-    client_id: 'icyhpvdBV9YQrT32u3SLpJ3jpGvxQ2c0',
     email,
-    password,
-    connection: 'news'
+    password
   };
 
   let data = new FormData();
