@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native';
 import {Container, Content, Button, Text, Spinner} from 'native-base';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -8,7 +7,6 @@ import Article from './Article';
 
 class FeedPage extends Component {
   render() {
-    // console.log(this.props.articles);
     if (this.props.loading || !this.props.articles) {
       return (<Spinner color='blue'/>)
     }
@@ -28,7 +26,6 @@ class FeedPage extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  // console.warn(state.articles);
   return {
     articles: state.articles,
     loading: state.ajaxCallsInProgress > 0
