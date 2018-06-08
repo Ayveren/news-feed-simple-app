@@ -37,6 +37,7 @@ export function signup({password, email}) {
         dispatch(ajaxCallError());
         dispatch(authError(error));
         throw(error);
-      }).then(()=> dispatch(getNews()))
+      })
+      .finally(()=> dispatch(getNews()))
   };
 }

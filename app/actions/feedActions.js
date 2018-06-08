@@ -10,6 +10,7 @@ export function getNewsError(error) {
 }
 const url = 'https://newsapi.org/v2/top-headlines?country=ua&category=general&apiKey=5a5d921e5e404a3bacbb7be011160084';
 export function getNews() {
+
   return (dispatch) => {
     dispatch(beginAjaxCall());
     fetch(url)
