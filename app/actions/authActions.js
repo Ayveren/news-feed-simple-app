@@ -13,7 +13,6 @@ export function authError(error) {
 export function signup({password, email}) {
   const url = 'https://google.com/signup';
   const payload = {
-
     email,
     password
   };
