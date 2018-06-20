@@ -30,6 +30,10 @@ class StartPage extends Component {
     };
   }
 
+  static navigationOptions = {
+    title: 'Sign In',
+  };
+
   async onSubmit() {
     const {email, password} = this.state;
     if (!email || !password) {
@@ -64,7 +68,6 @@ class StartPage extends Component {
       )
     }
     return (
-
       <Container>
         <Header>
           <Title>Awesome News App</Title>

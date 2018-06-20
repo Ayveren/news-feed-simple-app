@@ -13,8 +13,8 @@ class FeedPage extends Component {
     return (
       <Container>
         <Content>
-          {this.props.articles.map(article => {
-            return <Article data={article} key={article.publishedAt}/>
+          {this.props.articles.map((article, i) => {
+            return <Article data={article} key={i}/>
           })}
           <Button title='Log Out' onPress={() => this.props.navigation.goBack()}>
             <Text>Log Out</Text>
